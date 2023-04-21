@@ -1,4 +1,12 @@
 #define  MAX_TEMP  37
+const short PIN_SENSOR_TEMP_FRONT_R = 1;
+const short PIN_SENSOR_TEMP_FRONT_L = 1;
+const short PIN_SENSOR_TEMP_BACK_R = 1;
+const short PIN_SENSOR_TEMP_BACK_L = 1;
+
+const short PIN_RELAY = 1;
+
+
 class Task {
   unsigned long _interval;     // interval between task executions
   unsigned long _lastRunTime;  // last time the task was executed
@@ -23,6 +31,9 @@ class Relay {
 private:
   short pin;
 public:
+    Relay(short pin) {
+        this->pin = pin;
+    }
   bool on() {
     return true;
   }
@@ -31,6 +42,9 @@ public:
   }
   bool getStatus() {
     return true;
+  }
+  void start() {
+    pinMode($this->pin, OUTPUT);
   }
 };
 class SensorTemperature {
@@ -43,6 +57,7 @@ public:
     return (short)random(15, 40);
   }
   void start() {
+        pinMode($this->pin, INPUT);
     Serial.println("Sensor iniciado");
   }
 };
@@ -65,18 +80,21 @@ public:
     return random(14, 40);
   }
   void initSensors() {
-    for (short i = 0; i < 4; i++) {
-      sensors[i].start();
-    }
+      sensors[PIN_SENSOR_TEMP_FRONT_R].start();
+      sensors[PIN_SENSOR_TEMP_FRONT_L].start();
+      sensors[PIN_SENSOR_TEMP_BACK_R].start();
+      sensors[PIN_SENSOR_TEMP_BACK_L].start();
   }
 
   void reading() {
     if (this->readingCount > 9) {
       this->readingCount = 0;
-    }
-    for (short col = 0; col < 4; col++) {
-      temperatures[this->readingCount][col] = sensors[col].read();
-    }
+    }    
+    temperatures[this->readingCount][0] = sensors[PIN_SENSOR_TEMP_FRONT_R].read();
+    temperatures[this->readingCount][0] = sensors[PIN_SENSOR_TEMP_FRONT_L].read();
+    temperatures[this->readingCount][0] = sensors[PIN_SENSOR_TEMP_BACK_R].read();
+    temperatures[this->readingCount][0] = sensors[PIN_SENSOR_TEMP_BACK_L].read();
+    
     this->readingCount++;
   }
 
@@ -86,7 +104,7 @@ public:
 };
 
 AnalyzerTemperature analyzer;
-Relay relay;
+Relay relay(PIN_RELAY);
 
 Task readSensors(1 * 1000L, []() {
   analyzer.reading();
@@ -109,7 +127,6 @@ Task sendDataToWebServer(5 * 1000L * 60L, []() {
 });
 void setup() {
   // put your setup code here, to run once:
-
   Serial.begin(9600);
   analyzer.initSensors();
 }
