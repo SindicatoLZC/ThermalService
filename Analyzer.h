@@ -7,6 +7,8 @@ class TemperatureAnalyzer {
         SensorObject object;
         short pinAmbient;
         short pinObject; 
+        float sampleTemperatures [15][2];
+        float sampleHumidity [15];
     public:
         TemperatureAnalyzer(short pinAmbient) {
             this->pinAmbient = pinAmbient;
@@ -23,5 +25,16 @@ class TemperatureAnalyzer {
         void reading() {
             this->ambient.read();
             this->object.read();
+        }
+
+        void send() {
+
+        }
+
+        float getActualObjTemp() {
+            return this->object.getObjectTemp();
+        }
+        float getActualAmbientTemp() {
+            return this->ambient.getTemperature();
         }
 };

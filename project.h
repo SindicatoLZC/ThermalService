@@ -29,9 +29,16 @@ void setup() {
         analyzer.reading();
     }); 
 
+    taskPostData(30 * 1000L, []() {
+        analyzer.send();
+    });
+
 }
 
 
 void loop() {
+    taskReadSensors.run();
+    taskPostData.run();
+    taskActivateRelayIfNecessary.run();
 
 }
