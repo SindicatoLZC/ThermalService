@@ -1,38 +1,42 @@
 #include <math.h>
+#include <stdint.h>
 class Calculate
 {
 private:
-    float standardDeviation(float sample[], short length)
+    float standardDeviation(float sample[], uint8_t length)
     {
         float sum = 0.0, mean, sd = 0.0;
-        for (short i = 0; i < length; i++)
+        for (uint8_t i = 0; i < length; i++)
         {
             sum += sample[i];
         }
 
         mean = sum / length;
 
-        for (short i = 0; i < length; i++)
+        for (uint8_t i = 0; i < length; i++)
         {
             sd += pow(sample[i] - mean, 2);
         }
         return sqrt(sd / length);
     }
 
-    float media(float sample[], short length)
+    float mode(float sample[], short length)
     {
-        short frecuency[length];
+        uint8_t frecuency[length];
         float mode;
 
-        for(short i = 0; i < length; i++) {
-            frecuency[ (short) sample[i] ]++;
+        for (uint8_t i = 0; i < length; i++)
+        {
+            frecuency[(uint8_t)sample[i]]++;
         }
 
         short maxFrecuency = 0;
         short indexMode;
 
-        for(short i = 0; i < length; i++) {
-            if(frecuency[i] > maxFrecuency) {
+        for (uint8_t i = 0; i < length; i++)
+        {
+            if (frecuency[i] > maxFrecuency)
+            {
                 maxFrecuency = frecuency[i];
                 indexMode = i;
             }
@@ -40,12 +44,43 @@ private:
         return sample[indexMode];
     }
 
-public:
-    static float temperature(float sample[15][2])
-    {
-        float
+    float meanAbsoluteDeviation(float sample[], uint8_t length) {
+        float media, mad;
+        
+        for(uint8_t i = 0; i < length; i++) {
+            media += sample[i];
+        }
+
+        media = media / length;
+
+        for(uint8_t i = 0; i < length; i++) {
+            mad += fabs(sample[i] - media);
+        }
+
+        mad = mad / length;
+
+        return mad;
     }
+
+public:
+    static float temperature(float sample[], uint8_t row, uint8_t col)
+    {
+        float samplePlain[row * col];
+        uint8_t k = 0;
+
+        for (int i = 0; i < row; i++)
+        {
+            for (int j = 0; j < col; j++)
+            {
+                samplePlain[k] = sample[i][j];
+                k++;
+            }
+        }
+        return this->mode(samplePlain, row * col);
+    }
+
     static float humidity(float sample[15])
     {
+
     }
 };

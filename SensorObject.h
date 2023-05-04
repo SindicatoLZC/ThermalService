@@ -5,10 +5,10 @@
 class SensorObject
 {
 private:
-    short pin
-        Adafruit_MLX90614 sensor = NULL;
-    float ambientTemp;
-    float objectTemp;
+    uint8_t pin;
+    Adafruit_MLX90614 sensor = NULL;
+    short TEMPERATURE_MIN = -40;
+    short TEMPERATURE_MAX = 125;
 
 public:
     SensorObject()
@@ -22,19 +22,13 @@ public:
         Sleep::passTime(200); // Left pass 200 ms
     }
 
-    void read()
-    {
-        this->ambientTemp = sensor.readAmbientTempC();
-        this->objectTemp = sensor.readObjectTempC();
-    }
-
     float getAmbientTemp()
     {
-        return this->ambientTemp;
+        return this->sensor.readAmbientTempC();
     }
 
     float getObjectTemp()
     {
-        return this->objectTemp;
+        return this->sensor.readObjectTempC();
     }
 };

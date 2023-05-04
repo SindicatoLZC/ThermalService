@@ -1,13 +1,13 @@
-#include "WiFiConnection.h"
 
 short RELAY = 1;
+short DHT22 = 2;
 
-short DHT22_1 = 2;
-short DHT22_1 = 3;
+uint8_t LED_RED;
+uint8_t LED_BLUE;
+uint8_t LED_GREEN;
 
 
 WiFiConnection wifi = WiFiConnection();
-Relay relay = Relay(RELAY);
 TemperatureAnalyzer analyzer;
 
 Task taskReadSensors;
@@ -15,15 +15,14 @@ Task taskActivateRelayIfNecessary;
 Task taskPostData;
 
 
-
 void setup() {
     Serial.begin(9600);
     wifi.start();
-
    
-    analyzer = Analyzer(DHT22_1);
-
-    analyzer.start();
+    analyzer = TemperatureAnalyzer();
+    analyzer.setPinForAmbientSensor(DHT22);
+    analyzer.setPinForRelay(RELAY);
+    analyzer.startSensors();
 
     taskReadSensors(5 * 1000L, []() {
         analyzer.reading();
@@ -33,6 +32,9 @@ void setup() {
         analyzer.send();
     });
 
+    taskActivateRelayIfNecessary(15 * 1000L * 60L, []() {
+        analyzer.activateRelayIfNecessary();
+    });
 }
 
 
@@ -40,5 +42,4 @@ void loop() {
     taskReadSensors.run();
     taskPostData.run();
     taskActivateRelayIfNecessary.run();
-
 }
