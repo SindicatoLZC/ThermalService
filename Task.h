@@ -6,7 +6,10 @@ private:
     void (*function)();        // function pointer to the task
 
 public:
-    Task(unsigned long interval, void (*function)())
+    Task() {
+
+    }
+    void defineTask(unsigned long interval, void (*function)())
     {
         this->interval = interval;
         this->lastRunTime = 0;

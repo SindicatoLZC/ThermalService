@@ -1,11 +1,11 @@
 #include <WiFi.h>
-#include "Utils/Sleep.h"
+#include "Sleep.h"
 
 class WiFiConnection
 {
 private:
-    const char *SSID = "";
-    const char *PASSWORD = "";
+    const char *SSID = "KALTWULX";
+    const char *PASSWORD = "Rocklee@23";
     const short MAX_ATTEMPTS = 3;
 
     bool isConnected()
@@ -26,10 +26,12 @@ public:
         while (WiFi.status() != WL_CONNECTED)
         {
             Serial.print(".");
+            
             Sleep::passTime(1000);
         }
         WiFi.setAutoReconnect(true);
         Serial.println("¡Connected to WiFi!");
+        Serial.println(WiFi.localIP());
     }
 
     void reconnectIfNecessary()
