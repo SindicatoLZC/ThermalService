@@ -25,8 +25,7 @@ public:
         Serial.println("Connecting to WiFi..");
         while (WiFi.status() != WL_CONNECTED)
         {
-            Serial.print(".");
-            
+            Serial.print(".");            
             Sleep::passTime(1000);
         }
         WiFi.setAutoReconnect(true);

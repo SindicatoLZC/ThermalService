@@ -25,13 +25,12 @@ public:
     digitalWrite(PIN_LED_BLUE, LOW);
   }
 
-  static void parpadearLed(int pinLed, unsigned long duracionEncendido) {
-    unsigned long tiempoActual = millis();
-    static unsigned long tiempoPrevio = tiempoActual;
+  static void parpadearLed(uint8_t led, unsigned long timems, uint8_t blinks) {
+    for (int i = 0; i < blinks; i++) {
+      Sleep::passTime(timems);
+      digitalWrite(led, !digitalRead(led));
+      //Serial.printf("\nLED RED: %d", digitalRead(led));
 
-    if (tiempoActual - tiempoPrevio >= duracionEncendido) {
-      tiempoPrevio = tiempoActual;
-      digitalWrite(pinLed, !digitalRead(pinLed));
     }
   }
 

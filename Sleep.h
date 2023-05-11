@@ -4,12 +4,10 @@ class Sleep {
 public:
   Sleep() {
   }
-  static void passTime(unsigned long milisegundos) {
-    unsigned long tiempoActual = millis();
-    unsigned long tiempoFinal = tiempoActual + milisegundos;
-
-    while (millis() < tiempoFinal) {
-      // No hacer nada, solo esperar
+  static void passTime(unsigned long interval) {
+    unsigned long currentMillis = millis();
+    while (millis() - currentMillis < interval) {
+      // No hacer nada, simplemente esperar
     }
   }
 };

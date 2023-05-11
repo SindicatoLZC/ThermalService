@@ -61,8 +61,8 @@ public:
         continue;
       } else {
         Serial.println("Error en la solicitud. Intentando de nuevo..");
+        LedControl::parpadearLed(LedControl::PIN_LED_RED, 200, 6);
         attempt++;
-        LedControl::parpadearLed(LedControl::PIN_LED_RED, 500);
       }
     }
   }

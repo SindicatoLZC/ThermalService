@@ -26,7 +26,7 @@ void setup() {
   analyzer.setPinForAmbientSensor(PIN_DHT22);
   analyzer.startSensors();
 
-  taskReadSensors.defineTask(5 * 1000L, []() {
+  taskReadSensors.defineTask(30 * 1000L, []() {
     analyzer.reading();
   });
 
@@ -34,7 +34,7 @@ void setup() {
     analyzer.send();
   });
 
-  taskActivateRelayIfNecessary.defineTask(15 * 1000L, []() {
+  taskActivateRelayIfNecessary.defineTask(1 * 1000L * 60L, []() {
     analyzer.activateRelayIfNecessary();
   });
 }

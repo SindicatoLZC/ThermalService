@@ -103,6 +103,8 @@ public:
     this->fillHumiditySamples();
     this->fillObjectTemperatureSamples();
     Serial.printf("Se realizaron las lecturas!\n");
+    LedControl::parpadearLed(LedControl::PIN_LED_GREEN, 200, 2);
+
   }
 
   void send() {
@@ -138,6 +140,7 @@ public:
 
   void activateRelayIfNecessary() {
     float meanObjectTemp = Calculate::meanObjectTemp(this->sampleObjectTemperatures, 20);
+    LedControl::parpadearLed(LedControl::PIN_LED_BLUE, 200, 4);
 
     if (meanObjectTemp >= MAX_TEMPERATURE) {
       this->relay.tryToTurnOn();
